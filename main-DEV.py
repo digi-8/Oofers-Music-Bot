@@ -18,36 +18,34 @@ queue = []
 async def play(ctx, *, url):
   voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
   voice_channel = ctx.author.voice.channel
-
+  YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
   # Check if the user is connected to a channel. If connected to a Voice channel the bot joins the channel
   if voice_channel is None:
     await ctx.send("Connect to a voice channel!")
   else:
     if voice and voice.is_connected():
-        await voice.move_to(voice_channel)
+      await voice.move_to(voice_channel)
     else:
       await voice_channel.connect()
       
-    voice = get(client.voice_clients, guild=ctx.guild)
     ytregex = '^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$'
 
     # Check if the string is a link else it seaches the string on YT
     if re.match(ytregex, url):
       queue.append(url)   
     else:
-      YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
       with YoutubeDL(YDL_OPTIONS) as ydl:
           info = ydl.extract_info(f"ytsearch:{url}", download=False)['entries'][0]
           url = info.get('webpage_url', None)
-      print (url)
       queue.append(url)
 
+    
+      
     # Check if bot is playing music. If playing add the link to the queue, else play the song
     if not voice.is_playing():
       FFMPEG_OPTIONS = {
           'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
       while len(queue) >= 1:      
-        YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
         with YoutubeDL(YDL_OPTIONS) as ydl:
             info = ydl.extract_info(queue[0], download=False)
             title = info.get('title', None)
@@ -61,6 +59,9 @@ async def play(ctx, *, url):
       await sleep(60)
       await voice.disconnect()    
     else:
+      with YoutubeDL(YDL_OPTIONS) as ydl:
+          info = ydl.extract_info(queue[0], download=False)
+          title = info.get('title', None)
       await ctx.send(f'Added {title} to queue')
       
 
