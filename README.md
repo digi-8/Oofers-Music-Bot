@@ -2,13 +2,13 @@
 A python music discord bot with queue
 
 What I have added:
-  !play (link) - Plays the song or queues the song.
-  !skip - Skips current song.
-  !stop - Stops the bot.
-  !pause - Pauses the song.
-  !resume - Resumes the song.
-  !dc - Disconnects the bot.
-  !clear - Clears the last 5 messages.
+  - !play (link) - Plays the song or queues the song.
+  - !skip - Skips current song.
+  - !stop - Stops the bot.
+  - !pause - Pauses the song.
+  - !resume - Resumes the song.
+  - !dc - Disconnects the bot.
+  - !clear - Clears the last 5 messages.
 
 What I'm planning to add:
   - Search function to the !play command
