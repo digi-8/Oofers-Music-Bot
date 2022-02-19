@@ -1,5 +1,8 @@
 # Oofers-Music-Bot
+I'm just a guy trying to learn python, so this is just a way to do it for me :) (FYI: It might be super shit)
+
 A python music discord bot with queue
+
 
 What I have added:
   - !play (link) - Plays the song or queues the song.
