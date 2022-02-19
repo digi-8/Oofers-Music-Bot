@@ -38,8 +38,6 @@ async def play(ctx, *, url):
           info = ydl.extract_info(f"ytsearch:{url}", download=False)['entries'][0]
           url = info.get('webpage_url', None)
       queue.append(url)
-
-    
       
     # Check if bot is playing music. If playing add the link to the queue, else play the song
     if not voice.is_playing():
@@ -64,7 +62,6 @@ async def play(ctx, *, url):
           title = info.get('title', None)
       await ctx.send(f'Added {title} to queue')
       
-
 # Skip command: Stops the current song and playes the next in queue 
 @client.command()
 async def skip(ctx):
@@ -118,6 +115,7 @@ async def resume(ctx):
 @client.command(aliases=['disconnect'])
 async def dc(ctx):
     voice = get(client.voice_clients, guild=ctx.guild)
+    
     if voice.is_connected():
       await voice.disconnect()
       await ctx.send('Disconnected')
