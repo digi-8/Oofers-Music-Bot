@@ -42,6 +42,7 @@ async def play(ctx, *, url):
       queue.append(url)
       
     # Check if bot is playing music. If playing add the link to the queue, else play the song
+    voice = get(client.voice_clients, guild=ctx.guild)
     if not voice.is_playing():
       FFMPEG_OPTIONS = {
           'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
@@ -60,7 +61,7 @@ async def play(ctx, *, url):
       await voice.disconnect()    
     else:
       with YoutubeDL(YDL_OPTIONS) as ydl:
-          info = ydl.extract_info(queue[0], download=False)
+          info = ydl.extract_info(queue[-1], download=False)
           title = info.get('title', None)
       await ctx.send(f'Added {title} to queue')
       
@@ -94,24 +95,6 @@ async def stop(ctx):
     if voice.is_playing():
         voice.stop()
         await ctx.send('Stopping...')
-
-# Pauses command: Pauses the song
-@client.command()
-async def pause(ctx):
-    voice = get(client.voice_clients, guild=ctx.guild)
-
-    if voice.is_playing():
-        voice.pause()
-        await ctx.send('Music has been paused')
-      
-# Resume command: Resumes the song
-@client.command()
-async def resume(ctx):
-    voice = get(client.voice_clients, guild=ctx.guild)
-
-    if not voice.is_playing():
-        voice.resume()
-        await ctx.send('Music is resuming')
 
 # Disconnect command: Disconnects the bot
 @client.command(aliases=['disconnect'])
