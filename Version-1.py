@@ -7,6 +7,8 @@ from discord import TextChannel
 from youtube_dl import YoutubeDL
 from asyncio import sleep
 
+#Version 1.0
+
 client = commands.Bot(command_prefix='!')
 
 @client.command()
