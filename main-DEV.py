@@ -11,7 +11,7 @@ from asyncio import sleep
 # Version 2.2
 
 # Here you can change the prefix of the commands. Example: & makes the commands &play
-client = commands.Bot(command_prefix='&')
+client = commands.Bot(command_prefix='!')
 # Here is the queue where all the links get added
 queue = []
 
@@ -42,6 +42,7 @@ async def play(ctx, *, url):
       queue.append(url)
       
     # Check if bot is playing music. If playing add the link to the queue, else play the song
+    voice = get(client.voice_clients, guild=ctx.guild)
     if not voice.is_playing():
       FFMPEG_OPTIONS = {
           'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
