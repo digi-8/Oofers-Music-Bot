@@ -61,7 +61,7 @@ async def play(ctx, *, url):
       await voice.disconnect()    
     else:
       with YoutubeDL(YDL_OPTIONS) as ydl:
-          info = ydl.extract_info(queue[0], download=False)
+          info = ydl.extract_info(queue[-1], download=False)
           title = info.get('title', None)
       await ctx.send(f'Added {title} to queue')
       
