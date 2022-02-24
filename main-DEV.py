@@ -11,7 +11,7 @@ from asyncio import sleep
 # Version 2.2
 
 # Here you can change the prefix of the commands. Example: & makes the commands &play
-client = commands.Bot(command_prefix='!')
+client = commands.Bot(command_prefix='&')
 # Here is the queue where all the links get added
 queue = []
 
