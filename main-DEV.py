@@ -95,8 +95,7 @@ async def loop(ctx):
         'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
   if loop:
     loop = False
-
-  if not loop:
+  elif not loop:
     loop = True
 
   while loop:
