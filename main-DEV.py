@@ -14,6 +14,7 @@ from asyncio import sleep
 client = commands.Bot(command_prefix='&')
 # Here is the queue where all the links get added
 queue = []
+loop = False
 
 # Play command: This command Plays music, queues music or searches the string and queues the first result.
 @client.command()
@@ -61,7 +62,7 @@ async def play(ctx, *, url):
       await voice.disconnect()    
     else:
       with YoutubeDL(YDL_OPTIONS) as ydl:
-          info = ydl.extract_info(queue[-1], download=False)
+          info = ydl.extract_info(queue[0], download=False)
           title = info.get('title', None)
       await ctx.send(f'Added {title} to queue')
       
@@ -78,14 +79,36 @@ async def skip(ctx):
           info = ydl.extract_info(queue[0], download=False)
           title = info.get('title', None)
       URL = info['url']
-      voice.play(FFmpegPCMAudio(URL, **FFMPEG_OPTIONS))
+      voice.play(FFmpegPCMAudio(URL, **FFMPEG_OPTIONS), after=queue.pop[0])
       await ctx.send(f'Playing {title}')
-      queue.pop(0)
       voice.is_playing()
-      while voice.is_playing():
+      while voice.is_playing() or voice.is_paused():
         await sleep(5)
     await sleep(60)
     await voice.disconnect()    
+
+# Loop command: Loops the current song
+@clint.command()
+async def loop(ctx):
+  voice = get(client.voice_clients, guild=ctx.guild)
+  FFMPEG_OPTIONS = {
+        'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+  if loop:
+    loop = False
+
+  if not loop:
+    loop = True
+
+  while loop:
+    YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist': 'True'}
+    with YoutubeDL(YDL_OPTIONS) as ydl:
+        info = ydl.extract_info(queue[0], download=False)
+        title = info.get('title', None)
+    URL = info['url']
+    voice.play(FFmpegPCMAudio(URL, **FFMPEG_OPTIONS))
+    await ctx.send(f'Looping {title}')
+    while voice.is_playing() or voice.is_paused():
+          await sleep(5)
 
 # Stop command: Stops the current song, I think
 @client.command()
